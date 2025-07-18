@@ -38,9 +38,7 @@ dependencies:
   flutter_image_compress: ^2.4.0
   get: ^4.7.2
   supabase_flutter: ^2.9.1
-  dependencies:
-  flutter_dotenv: ^5.1.0
-
+  flutter_dotenv: ^5.2.1
 
 
 dev_dependencies:
@@ -66,8 +64,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - .env 
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
