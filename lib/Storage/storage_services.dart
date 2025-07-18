@@ -1,16 +1,33 @@
 import 'dart:io';
+import 'package:path/path.dart' as path;
+import 'package:mime/mime.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:flutter_supabase/Storage/Image_services.dart';
+class StorageServices {
+  final SupabaseClient client = Supabase.instance.client;
 
-class StorageServices extends ImageServices {
-  Future<void> uploadAllImages() async {
-    // Await the compressed images list
-    List<File> compressedImages = await compressImageList();
+  Future<void> uploadFilesToSupabase(List<File> files) async {
+    for (File file in files) {
+      try {
+        final fileName = path.basename(file.path);
+        final fileBytes = await file.readAsBytes();
+        final mimeType = lookupMimeType(file.path);
 
-    // Upload each compressed image
-    for (var image in compressedImages) {
-      // Implement your upload logic here
-      print('Uploading ${image.path}');
+        await client.storage
+            .from('xcrop')
+            .uploadBinary(
+              'images/$fileName',
+              fileBytes,
+              fileOptions: FileOptions(contentType: mimeType, upsert: true),
+            );
+
+        final publicUrl = client.storage
+            .from('xcrop')
+            .getPublicUrl('images/$fileName');
+        print('Uploaded: $publicUrl');
+      } catch (e) {
+        print('Error uploading ${file.path}: $e');
+      }
     }
   }
 }

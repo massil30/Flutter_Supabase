@@ -70,8 +70,10 @@ class _StorageViewState extends State<StorageView> {
           ElevatedButton(
             onPressed: () async {
               try {
-                await StorageServices()
-                    .uploadAllImages(); // ✅ This fixes your issue
+                await StorageServices().uploadFilesToSupabase(
+                  image_controller.images,
+                );
+                print('Images uploaded successfully');
               } catch (e) {
                 Get.snackbar('Error', 'Failed to pick images: $e');
               }
